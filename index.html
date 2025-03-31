@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B-Roll Mapper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="header-toggle" id="headerToggle" title="Alternar modo compacto">
+                <i class="fas fa-chevron-up"></i>
+            </button>
+            <h1>B-Roll Mapper</h1>
+            <p>Mapa de pesquisa visual com links interativos para b-roll</p>
+        </header>
+
+        <div class="main-controls-section">
+            <button id="insertDataBtn" class="main-control-btn">
+                <i class="fas fa-file-import"></i>
+                Inserir Dados
+            </button>
+            <button id="copyFullJsonBtn" class="main-control-btn export-btn">
+                <i class="fas fa-code"></i>
+                Copiar JSON Completo
+            </button>
+            <button id="clearDataBtn" class="main-control-btn secondary">
+                <i class="fas fa-trash"></i>
+                Limpar Dados
+            </button>
+        </div>
+
+        <div class="filter-bar">
+            <div>
+                <label>Filtrar por fonte:</label>
+                <div class="filter-options">
+                    <div class="filter-option selected" data-source="all">Todas</div>
+                    <div class="filter-option" data-source="bv">BV</div>
+                    <div class="filter-option" data-source="yt">YT</div>
+                    <div class="filter-option" data-source="gi">GI</div>
+                    <div class="filter-option" data-source="mot">MOT</div>
+                </div>
+                <div class="filter-info">
+                    <span class="filter-info-item"><strong>BV</strong> = Banco de Vídeos</span>
+                    <span class="filter-info-item"><strong>YT</strong> = YouTube</span>
+                    <span class="filter-info-item"><strong>GI</strong> = Google Imagens</span>
+                    <span class="filter-info-item"><strong>MOT</strong> = Motion Graphics</span>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Buscar em qualquer campo...">
+            </div>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <!-- Conteúdo gerado dinamicamente -->
+             <p style="text-align: center; opacity: 0.7; margin-top: 2rem;">Insira dados para começar.</p>
+        </div>
+
+        <!-- Source menu -->
+        <div id="sourceMenu" class="source-menu">
+            <div class="source-menu-item bv" data-source="bv">BV (Banco de Vídeos)</div>
+            <div class="source-menu-item yt" data-source="yt">YT (YouTube)</div>
+            <div class="source-menu-item gi" data-source="gi">GI (Google Imagens)</div>
+            <div class="source-menu-item mot" data-source="mot">MOT (Motion Graphics)</div>
+        </div>
+
+        <!-- Toast de notificação -->
+        <div id="toast" class="toast">
+            <div class="toast-content">
+                <i class="fas fa-check-circle toast-icon"></i>
+                <span class="toast-message">Copiado para a área de transferência!</span>
+            </div>
+        </div>
+
+        <!-- Modal para inserir dados -->
+        <div class="modal-overlay" id="insertDataModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Inserir Dados de B-Roll</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="input-format-selector">
+                        <button class="input-format-btn selected" data-format="markdown">Markdown</button>
+                        <button class="input-format-btn" data-format="json">JSON</button>
+                        <button class="input-format-btn doc-btn" id="docBtn">
+                            <i class="fas fa-question-circle"></i> DOC
+                        </button>
+                    </div>
+
+                    <div id="markdownInputContainer" class="input-container active">
+                        <textarea id="markdownInput" placeholder="Cole seu documento de markdown aqui..." style="width: 100%; height: 400px; padding: 1rem; background: var(--background); color: var(--text); border: 1px solid var(--border); border-radius: var(--border-radius); font-size: 0.95rem; resize: vertical;"></textarea>
+                        <div class="example-preview" style="opacity: 0.6; margin-top: 10px; font-size: 0.85rem;">
+                            <p>Exemplo: <code>| TIMECODE | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |<br>| 00:00-00:15 | Avenidas Buenos Aires | YT | "Avenida 9 de Julio" |</code></p>
+                        </div>
+                    </div>
+
+                    <div id="jsonInputContainer" class="input-container">
+                        <textarea id="jsonInput" placeholder="Cole seu JSON aqui..." style="width: 100%; height: 400px; padding: 1rem; background: var(--background); color: var(--text); border: 1px solid var(--border); border-radius: var(--border-radius); font-size: 0.95rem; resize: vertical;"></textarea>
+                        <div class="example-preview" style="opacity: 0.6; margin-top: 10px; font-size: 0.85rem;">
+                            <p>Exemplo: <code>{"sections": [{"title": "HOOK", "items": [{"id": 1, "timecode": "00:00-00:15", "element": "Avenidas", "source": "YT", "links": {"https://example.com": "Link 1"}, "notes": "Nota importante"}]}]}</code></p>
+                        </div>
+                    </div>
+
+                    <div class="example-actions">
+                        <button class="example-btn" id="loadExampleBtn">
+                            <i class="fas fa-lightbulb"></i>
+                            Carregar exemplo
+                        </button>
+                        <button class="example-btn" id="loadExampleWithRoteiroBtn">
+                            <i class="fas fa-lightbulb"></i>
+                            Carregar exemplo com roteiro
+                        </button>
+                        <button class="example-btn" id="loadJsonExampleBtn" style="display: none;">
+                            <i class="fas fa-lightbulb"></i>
+                            Carregar exemplo JSON
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="secondary" id="cancelDataBtn">Cancelar</button>
+                    <button id="processDataBtn">Processar Dados</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de documentação -->
+        <div class="modal-overlay" id="docModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Documentação - Formatos de Entrada</h3>
+                    <button class="modal-close" id="docModalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="doc-section">
+                        <h4>Formato Markdown</h4>
+                        <p>O B-Roll Mapper aceita dois formatos de tabela markdown:</p>
+
+                        <h5>1. Formato Básico (Sem Roteiro):</h5>
+                        <pre>
+| TIMECODE | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |
+|----------|--------------|-------|----------------|
+| 00:00-00:15 | Descrição do elemento 1 | YT | "termo1", "termo2" |
+| 00:15-00:30 | Descrição do elemento 2 | BV | "termo3", "termo4" |</pre>
+
+                        <h5>2. Formato com Roteiro:</h5>
+                        <pre>
+| TIMECODE | ROTEIRO | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |
+|----------|---------|--------------|-------|----------------|
+| 00:00-00:15 | Texto do roteiro aqui | Descrição do elemento 1 | YT | "termo1", "termo2" |
+| 00:15-00:30 | Mais roteiro aqui | Descrição do elemento 2 | BV | "termo3", "termo4" |</pre>
+
+                        <p>Você pode organizar seu markdown em seções usando títulos com "#":</p>
+                        <pre>
+# TÍTULO DA SEÇÃO 1
+
+| TIMECODE | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |
+...
+
+# TÍTULO DA SEÇÃO 2
+...</pre>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4>Formato JSON</h4>
+                        <p>O formato JSON deve seguir a seguinte estrutura:</p>
+                        <pre>
+{
+  "sections": [
+    {
+      "title": "TÍTULO DA SEÇÃO",
+      "items": [
+        {
+          "id": 1,
+          "timecode": "00:00-00:15",
+          "roteiro": "Texto do roteiro (opcional)",
+          "element": "O que buscar",
+          "source": "YT",
+          "searchTermsText": "termo1, termo2",
+          "searchTerms": ["termo1", "termo2"],
+          "links": {
+            "https://example.com/video": "YouTube Example",
+            "https://another-site.com/asset": "Banco de Vídeos"
+          },
+          "notes": "Notas importantes sobre este item",
+          "expanded": true,
+          "isTranslated": false,
+          "originalRoteiro": null,
+          "translatedRoteiro": null
+        }
+      ]
+    }
+  ]
+}</pre>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4>Persistência e Portabilidade</h4>
+                        <p>O B-Roll Mapper oferece duas formas de salvar seu trabalho:</p>
+                        <ul>
+                            <li><strong>Automático (LocalStorage):</strong> Todas as alterações são salvas automaticamente no navegador atual.</li>
+                            <li><strong>Portabilidade (JSON):</strong> Use o botão "Copiar JSON Completo" no topo da página para exportar todo o projeto, ou o botão "Copiar JSON" em cada seção para exportações parciais.</li>
+                        </ul>
+                        <p>Fluxo de trabalho recomendado entre dispositivos:</p>
+                        <ol>
+                            <li>No dispositivo original, clique em "Copiar JSON Completo" (na barra superior) e salve o conteúdo em qualquer serviço (Notion, Google Docs, etc.)</li>
+                            <li>No novo dispositivo, use "Inserir Dados" → "JSON" e cole o conteúdo salvo</li>
+                            <li>Continue seu trabalho exatamente de onde parou, com todos os links e notas preservados</li>
+                        </ol>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4>Códigos de Fonte</h4>
+                        <ul>
+                            <li><strong>BV</strong> = Banco de Vídeos (Stock Footage)</li>
+                            <li><strong>YT</strong> = YouTube</li>
+                            <li><strong>GI</strong> = Google Imagens</li>
+                            <li><strong>MOT</strong> = Motion Graphics</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="secondary" id="closeDocBtn">Fechar</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            B-Roll Mapper © 2025 - Ferramenta para criação de mapas de pesquisa visual
+            <div style="margin-top: 5px; font-size: 0.8rem; opacity: 0.8;">
+                <i class="fas fa-save"></i> Salvamento automático ativado
+            </div>
+        </footer>
+    </div> <!-- Fechamento de container -->
+
+    <!-- Script principal (módulo) -->
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>
