@@ -206,7 +206,12 @@ function createSourceCell(item, sectionIndex, itemIndex) {
 // Gerar links de busca baseados na fonte e termo
 function generateSearchLinks(source, term) {
     if (!term || term === '-') return '-';
+    
+    // Garantir que o termo está limpo e bem formatado
     const cleanTerm = term.trim();
+    // Sem termos vazios
+    if (!cleanTerm) return '';
+    
     const encodedTerm = encodeURIComponent(cleanTerm);
     const spaceReplaced = cleanTerm.replace(/ /g, "+");
     const dashReplaced = cleanTerm.replace(/ /g, "-");

@@ -158,10 +158,20 @@ function parseJson(jsonText) {
 // Extrai termos de busca de um texto
 function extractSearchTerms(text) {
     if (!text) return [];
-    // Regex to capture terms within double quotes, single quotes, or separated by commas
-    const matches = text.match(/("[^"]+"|'[^']+'|[^,]+)/g) || [];
-    // Clean up quotes and trim whitespace
-    return matches.map(term => term.replace(/^["']|["']$/g, '').trim()).filter(Boolean);
+    
+    // Primeiro remover aspas e espaços extras do texto completo
+    const cleanedText = text.trim();
+    
+    // Dividir por vírgula para obter termos separados
+    const terms = cleanedText.split(/\s*,\s*/);
+    
+    // Limpar cada termo individualmente
+    return terms
+        .map(term => {
+            // Remover aspas do início e fim
+            return term.replace(/^["']+|["']+$/g, '').trim();
+        })
+        .filter(term => term.length > 0); // Remover termos vazios
 }
 
 // Serializa dados para JSON formatado
