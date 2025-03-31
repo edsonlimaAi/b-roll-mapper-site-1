@@ -212,10 +212,10 @@ function generateSearchLinks(source, term) {
     const dashReplaced = cleanTerm.replace(/ /g, "-");
 
     const linksBySource = {
-        'BV': { Storyblocks: `https://www.storyblocks.com/video/search/${dashReplaced}`, EnvatoElements: `https://elements.envato.com/stock-video/${spaceReplaced}`, Pexels: `https://www.pexels.com/search/videos/${encodedTerm}/?orientation=landscape`, Pixabay: `https://pixabay.com/videos/search/${encodedTerm}/?orientation=horizontal` },
+        'BV': { Storyblocks: `https://www.storyblocks.com/video/search/${dashReplaced}`, Envato: `https://elements.envato.com/stock-video/${spaceReplaced}`, Pexels: `https://www.pexels.com/search/videos/${encodedTerm}/?orientation=landscape`, Pixabay: `https://pixabay.com/videos/search/${encodedTerm}/?orientation=horizontal` },
         'YT': { YouTube: `https://www.youtube.com/results?search_query=${spaceReplaced}`, Vimeo: `https://vimeo.com/search?q=${spaceReplaced}` },
-        'GI': { GoogleImages: `https://www.google.com/search?q=${spaceReplaced}&tbm=isch`, Unsplash: `https://unsplash.com/s/photos/${dashReplaced}`, FlickrCC: `https://flickr.com/search/?text=${spaceReplaced}&license=2%2C3%2C4%2C5%2C6%2C9` },
-        'MOT': { Google: `https://www.google.com/search?q=${spaceReplaced}`, EnvatoElements: `https://elements.envato.com/motion-graphics/${spaceReplaced}`, Storyblocks: `https://www.storyblocks.com/motion-backgrounds/search/${dashReplaced}` }
+        'GI': { Google: `https://www.google.com/search?q=${spaceReplaced}&tbm=isch`, Unsplash: `https://unsplash.com/s/photos/${dashReplaced}`, FlickrCC: `https://flickr.com/search/?text=${spaceReplaced}&license=2%2C3%2C4%2C5%2C6%2C9`, Wikimedia: `https://commons.wikimedia.org/w/index.php?search=${spaceReplaced}` },
+        'MOT': { Google: `https://www.google.com/search?q=${spaceReplaced}`, Statista: `https://www.statista.com/search/?q=${spaceReplaced}`, Infogram: `https://infogram.com/search/${spaceReplaced}` }
     };
     const links = linksBySource[source] || { Google: `https://www.google.com/search?q=${spaceReplaced}`, YouTube: `https://www.youtube.com/results?search_query=${spaceReplaced}` };
 
@@ -272,8 +272,10 @@ function createURLPreview(url, title, sectionId, itemId) {
 
     try {
         const domain = new URL(url).hostname;
+        
+        // Use favicon de tamanho 64 para melhor qualidade
         preview.innerHTML = `
-            <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=16" class="url-favicon" alt="" loading="lazy">
+            <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" class="url-favicon" alt="" loading="lazy">
             <span class="url-title">${title || domain}</span>
             <span class="url-remove"><i class="fas fa-times"></i></span>
         `;

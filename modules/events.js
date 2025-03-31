@@ -261,23 +261,27 @@ function handleURLInput(input) {
     try {
         new URL(url); // Validar formato da URL
         const domain = new URL(url).hostname.replace(/^www\./, '');
-
+        // Podemos gerar um título mais descritivo baseado no domínio
+        let title = domain;
+        
+        // Simplificar domínio para título - exemplo: youtube.com -> YouTube
+        if (domain.includes('youtube')) title = 'YouTube';
+        else if (domain.includes('vimeo')) title = 'Vimeo';
+        else if (domain.includes('unsplash')) title = 'Unsplash';
+        else if (domain.includes('flickr')) title = 'Flickr';
+        else if (domain.includes('pexels')) title = 'Pexels';
+        else if (domain.includes('pixabay')) title = 'Pixabay';
+        else if (domain.includes('envato')) title = 'Envato';
+        else if (domain.includes('storyblocks')) title = 'Storyblocks';
+        
         if (processedData[sectionId]?.items[itemId]) {
-            const item = processedData[sectionId].items[itemId];
-            item.links = item.links || {};
-            if (item.links[url]) {
-                showToast('Este link já foi adicionado.');
-                input.value = '';
-                return;
-            }
-            
             // Adicionar URL e salvar
-            if (addURLToItem(sectionId, itemId, url, domain)) {
+            if (addURLToItem(sectionId, itemId, url, title)) {
                 const urlInputWrapper = input.parentElement;
                 
                 // Importar dinamicamente para evitar dependência circular
                 import('./renderer.js').then(module => {
-                    const preview = module.createURLPreview(url, domain, sectionId, itemId);
+                    const preview = module.createURLPreview(url, title, sectionId, itemId);
                     urlInputWrapper.insertBefore(preview, input);
                     input.value = '';
                 });

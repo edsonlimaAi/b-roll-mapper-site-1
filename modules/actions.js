@@ -111,7 +111,18 @@ function addURLToItem(sectionId, itemId, url, title) {
     
     const item = processedData[sectionId].items[itemId];
     item.links = item.links || {};
-    item.links[url] = title;
+    
+    // Se URL já existe, adiciona com um sufixo único para permitir múltiplos links
+    // para a mesma URL (útil quando o usuário quer adicionar diferentes referências para o mesmo site)
+    if (item.links[url]) {
+        // Gerar um identificador único para esta URL
+        const timestamp = new Date().getTime();
+        const uniqueUrl = `${url}#${timestamp}`;
+        item.links[uniqueUrl] = title;
+    } else {
+        item.links[url] = title;
+    }
+    
     saveDataToStorage();
     return true;
 }
