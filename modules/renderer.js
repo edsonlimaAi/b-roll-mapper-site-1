@@ -124,6 +124,16 @@ function stopResize() {
 // Criar corpo da tabela
 function createTableBody(items, sectionIndex, hasRoteiro) {
     const tbody = document.createElement('tbody');
+    
+    // Certifica-se de processar TODOS os itens, sem limite
+    if (!items || items.length === 0) {
+        console.warn(`Nenhum item para renderizar na seção ${sectionIndex}`);
+        return tbody;
+    }
+    
+    // Para depuração
+    console.log(`Renderizando ${items.length} itens na seção ${sectionIndex}`);
+    
     items.forEach((item, itemIndex) => {
         const row = document.createElement('tr');
         row.className = `${item.source?.toLowerCase() || 'unknown'}-row`;
@@ -145,6 +155,7 @@ function createTableBody(items, sectionIndex, hasRoteiro) {
 
         tbody.appendChild(row);
     });
+    
     return tbody;
 }
 
@@ -217,7 +228,7 @@ function generateSearchLinks(source, term) {
     const dashReplaced = cleanTerm.replace(/ /g, "-");
 
     const linksBySource = {
-        'BV': { Storyblocks: `https://www.storyblocks.com/video/search/${dashReplaced}`, Envato: `https://elements.envato.com/stock-video/${spaceReplaced}`, Pexels: `https://www.pexels.com/search/videos/${encodedTerm}/?orientation=landscape`, Pixabay: `https://pixabay.com/videos/search/${encodedTerm}/?orientation=horizontal` },
+        'BV': { Storyblocks: `https://www.storyblocks.com/video/search/${dashReplaced}`, EnvatoElements: `https://elements.envato.com/stock-video/${spaceReplaced}`, Pexels: `https://www.pexels.com/search/videos/${encodedTerm}/?orientation=landscape`, Pixabay: `https://pixabay.com/videos/search/${encodedTerm}/?orientation=horizontal` },
         'YT': { YouTube: `https://www.youtube.com/results?search_query=${spaceReplaced}`, Vimeo: `https://vimeo.com/search?q=${spaceReplaced}` },
         'GI': { Google: `https://www.google.com/search?q=${spaceReplaced}&tbm=isch`, Unsplash: `https://unsplash.com/s/photos/${dashReplaced}`, FlickrCC: `https://flickr.com/search/?text=${spaceReplaced}&license=2%2C3%2C4%2C5%2C6%2C9`, Wikimedia: `https://commons.wikimedia.org/w/index.php?search=${spaceReplaced}` },
         'MOT': { Google: `https://www.google.com/search?q=${spaceReplaced}`, Statista: `https://www.statista.com/search/?q=${spaceReplaced}`, Infogram: `https://infogram.com/search/${spaceReplaced}` }

@@ -62,7 +62,20 @@ function toggleSectionExpansion(event) {
     const header = event.currentTarget;
     const content = header.nextElementSibling;
     const icon = header.querySelector('.section-toggle i');
+    
+    // Toggle expanded class
+    const wasExpanded = content.classList.contains('expanded');
     content.classList.toggle('expanded');
+    
+    // Se estava colapsado e agora está expandido, remover completamente qualquer limite de altura
+    if (!wasExpanded) {
+        content.style.maxHeight = 'none';
+        content.style.overflow = 'visible';
+    } else {
+        // Se estamos colapsando, primeiro redefine para 0
+        content.style.maxHeight = '0';
+    }
+    
     icon.classList.toggle('fa-chevron-down');
     icon.classList.toggle('fa-chevron-up');
 }

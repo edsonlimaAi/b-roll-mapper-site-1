@@ -1281,4 +1281,33 @@ td.notes-cell {
     transform: scale(1);
 }
 
-/* Este trecho pode ser adicionado ao final do seu arquivo styles.css */
+/* Esta é a correção para o problema de altura máxima das seções
+   Adicione este trecho ao seu arquivo styles.css */
+
+   .section-content {
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+}
+
+.section-content.expanded {
+    max-height: none !important; /* Remover completamente qualquer limite de altura */
+    padding: 1rem;
+    overflow: visible; /* Garantir que o conteúdo seja totalmente visível */
+}
+
+/* Certifique-se de que a tabela é sempre mostrada completamente */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    max-height: none !important;
+}
+
+/* Garantir que o tbody não tenha altura máxima */
+table tbody {
+    max-height: none !important;
+    display: table-row-group;
+}
+
