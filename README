@@ -1,0 +1,137 @@
+# B-Roll Mapper
+
+Uma ferramenta web profissional para criar mapas interativos de pesquisa visual para gravações de B-roll, projetada para otimizar o fluxo de trabalho de produção de vídeo.
+
+![B-Roll Mapper](https://via.placeholder.com/800x400?text=B-Roll+Mapper)
+
+## Visão Geral
+
+O B-Roll Mapper ajuda produtores, diretores e editores de vídeo a organizar e acompanhar suas necessidades de material de B-roll em um formato estruturado e pesquisável. O aplicativo permite criar um mapeamento abrangente entre o timeline do seu vídeo, os elementos visuais necessários e as possíveis fontes, tornando o processo de aquisição de B-roll mais eficiente.
+
+## Recursos
+
+- **Organização Baseada em Timeline**: Mapeie necessidades de B-roll para timecodes específicos do seu vídeo
+- **Categorização de Fontes**: Organize gravações por tipo de fonte (Banco de Vídeos, YouTube, Google Imagens, Motion Graphics)
+- **Integração com Roteiro**: Inclua conteúdo do roteiro junto ao planejamento de B-roll para contexto
+- **Links de Pesquisa Interativos**: Gere links de busca para plataformas apropriadas com base no tipo de fonte
+- **Gerenciamento de URLs Personalizadas**: Adicione e acompanhe URLs específicas de gravações que você encontrou
+- **Suporte à Tradução**: Capacidade integrada para traduzir conteúdo do roteiro
+- **Entrada de Dados Flexível**: Importe dados via tabelas Markdown ou JSON
+- **Opções Inteligentes de Exportação**: Exporte sua pesquisa como Markdown, JSON ou listas de links personalizados
+- **Salvamento Local Automático**: Nunca perca seu trabalho com armazenamento baseado no navegador
+- **Design Responsivo**: Funciona em dispositivos desktop e móveis
+
+## Primeiros Passos
+
+### Instalação
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seuusuario/b-roll-mapper.git
+   cd b-roll-mapper
+   ```
+
+2. Abra o aplicativo:
+   - Simplesmente abra o arquivo `index.html` em um navegador moderno
+   - Não são necessários passos de build ou servidor
+
+### Uso
+
+#### Adicionando Novos Dados
+
+1. Clique no botão "Inserir Dados" na seção de controle principal
+2. Escolha seu formato de entrada preferido (Markdown ou JSON)
+3. Insira seus dados no formato apropriado (exemplos disponíveis via botões "Carregar exemplo")
+4. Clique em "Processar Dados" para adicionar o conteúdo ao seu mapeamento
+
+#### Formato Markdown
+
+```markdown
+# TÍTULO DA SEÇÃO
+
+| TIMECODE | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |
+|----------|--------------|-------|----------------|
+| 00:00-00:15 | Descrição do elemento | YT | "termo de busca 1", "termo de busca 2" |
+```
+
+Ou com conteúdo de roteiro:
+
+```markdown
+# TÍTULO DA SEÇÃO
+
+| TIMECODE | ROTEIRO | O QUE BUSCAR | FONTE | TERMOS DE BUSCA |
+|----------|---------|--------------|-------|----------------|
+| 00:00-00:15 | Conteúdo do roteiro aqui | Descrição do elemento | YT | "termo de busca 1", "termo de busca 2" |
+```
+
+#### Trabalhando com Fontes
+
+O aplicativo suporta quatro tipos de fonte:
+- **BV** - Banco de Vídeos
+- **YT** - YouTube
+- **GI** - Google Imagens
+- **MOT** - Motion Graphics
+
+Cada tipo de fonte gera links de pesquisa apropriados para plataformas relevantes.
+
+#### Gerenciando Seu Trabalho
+
+- **Filtragem**: Use os filtros de tipo de fonte e a barra de busca para encontrar itens rapidamente
+- **Links Personalizados**: Adicione URLs específicas que você encontrou para cada item
+- **Notas**: Adicione notas de produção ou comentários para cada item
+- **Exportação**: Use as funções de cópia para exportar seus dados em vários formatos
+- **Tradução**: Traduza conteúdo do roteiro com um clique
+
+## Estrutura do Projeto
+
+```
+b-roll-mapper/
+├── index.html             # HTML principal do aplicativo
+├── styles.css             # Estilos do aplicativo
+├── script.js              # Ponto de entrada do aplicativo
+├── modules/               # Módulos JavaScript
+│   ├── app.js             # Inicialização do núcleo do aplicativo
+│   ├── store.js           # Gerenciamento de armazenamento de dados
+│   ├── ui.js              # Renderização e manipulação da UI
+│   ├── events.js          # Tratamento de eventos
+│   ├── actions.js         # Ações do usuário (copiar, exportar, etc.)
+│   ├── parser.js          # Análise de dados (Markdown, JSON)
+│   ├── renderer.js        # Renderização de tabelas e componentes
+│   └── examples.js        # Dados de exemplo
+```
+
+## Persistência de Dados
+
+O aplicativo salva automaticamente seu trabalho no localStorage do seu navegador. Para transferir seu trabalho entre dispositivos:
+
+1. Use o botão "Copiar JSON Completo" para copiar seu conjunto completo de dados
+2. Salve o JSON em um arquivo de texto ou armazenamento na nuvem
+3. No novo dispositivo, use "Inserir Dados" → formato JSON para importar seus dados
+
+## Compatibilidade com Navegadores
+
+O aplicativo funciona melhor em navegadores modernos com suporte a localStorage:
+- Chrome (recomendado)
+- Firefox
+- Safari
+- Edge
+
+## Contribuindo
+
+Este é um projeto privado, mas contribuições internas são bem-vindas. Por favor, siga estes passos:
+
+1. Crie uma branch de recurso (`git checkout -b feature/recurso-incrivel`)
+2. Faça suas alterações
+3. Commit suas alterações (`git commit -m 'Adicionar algum recurso incrível'`)
+4. Push para a branch (`git push origin feature/recurso-incrivel`)
+5. Crie um Pull Request
+
+## Licença
+
+Este projeto é privado e não está licenciado para uso público ou distribuição.
+
+## Agradecimentos
+
+- Font Awesome pelos ícones
+- Google Fonts pela tipografia
+- Várias plataformas de banco de vídeos e mídia pelo suporte à integração
